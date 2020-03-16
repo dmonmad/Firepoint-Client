@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
+
     private void Awake()
     {
         if (instance == null)
@@ -21,13 +22,17 @@ public class GameManager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
-
     }
 
+    /// <summary>Spawns a player.</summary>
+    /// <param name="_id">The player's ID.</param>
+    /// <param name="_name">The player's name.</param>
+    /// <param name="_position">The player's starting position.</param>
+    /// <param name="_rotation">The player's starting rotation.</param>
     public void SpawnPlayer(int _id, string _username, Vector3 _position, Quaternion _rotation)
     {
         GameObject _player;
-        if(_id == Client.instance.myId)
+        if (_id == Client.instance.myId)
         {
             _player = Instantiate(localPlayerPrefab, _position, _rotation);
         }

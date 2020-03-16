@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -19,7 +20,6 @@ public enum ClientPackets
     playerMovement
 }
 
-
 public class Packet : IDisposable
 {
     private List<byte> buffer;
@@ -29,7 +29,7 @@ public class Packet : IDisposable
     /// <summary>Creates a new empty packet (without an ID).</summary>
     public Packet()
     {
-        buffer = new List<byte>(); // Intitialize buffer
+        buffer = new List<byte>(); // Initialize buffer
         readPos = 0; // Set readPos to 0
     }
 
@@ -37,7 +37,7 @@ public class Packet : IDisposable
     /// <param name="_id">The packet ID.</param>
     public Packet(int _id)
     {
-        buffer = new List<byte>(); // Intitialize buffer
+        buffer = new List<byte>(); // Initialize buffer
         readPos = 0; // Set readPos to 0
 
         Write(_id); // Write packet id to the buffer
@@ -47,7 +47,7 @@ public class Packet : IDisposable
     /// <param name="_data">The bytes to add to the packet.</param>
     public Packet(byte[] _data)
     {
-        buffer = new List<byte>(); // Intitialize buffer
+        buffer = new List<byte>(); // Initialize buffer
         readPos = 0; // Set readPos to 0
 
         SetBytes(_data);
@@ -357,7 +357,7 @@ public class Packet : IDisposable
         return new Vector3(ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos));
     }
 
-    /// <summary>Reads a Vector3 from the packet.</summary>
+    /// <summary>Reads a Quaternion from the packet.</summary>
     /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
     public Quaternion ReadQuaternion(bool _moveReadPos = true)
     {
