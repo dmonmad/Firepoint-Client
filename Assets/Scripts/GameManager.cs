@@ -7,9 +7,12 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public static Dictionary<int, PlayerManager> players = new Dictionary<int, PlayerManager>();
+    public static Dictionary<int, Weapon> items = new Dictionary<int, Weapon>();
 
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
+    public GameObject[] decalPrefabs;
+    public GameObject[] weaponPrefabs;
 
     private void Awake()
     {
@@ -22,6 +25,8 @@ public class GameManager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
+
+        PopulateDictionaryWithWeapons();
     }
 
     /// <summary>Spawns a player.</summary>
@@ -41,8 +46,47 @@ public class GameManager : MonoBehaviour
             _player = Instantiate(playerPrefab, _position, _rotation);
         }
 
-        _player.GetComponent<PlayerManager>().id = _id;
-        _player.GetComponent<PlayerManager>().username = _username;
+        _player.GetComponent<PlayerManager>().Initialize(_id, _username);
         players.Add(_id, _player.GetComponent<PlayerManager>());
+    }
+
+    /// <summary>Apply a decal in a given position.</summary>
+    /// <param name="_position">The decal's location.</param>
+    /// <param name="_rotation">The decal's rotation.</param>
+    public void ApplyDecal(Vector3 _position, Quaternion _rotation)
+    {
+        Instantiate(decalPrefabs[0], _position, _rotation);
+    }
+
+    /// <summary>Spawns a weapon in the specified location.</summary>
+    /// <param name="_weaponId">Network's item's id.</param>
+    /// <param name="_position">The decal's location.</param>
+    /// <param name="_weaponDataId">The decal's rotation.</param>
+    public void SpawnWeapon(int _weaponId, Vector3 _position, int _weaponDataId)
+    {
+        
+    }
+
+    private void PopulateDictionaryWithWeapons()
+    {
+        Debug.Log("Populating dictionary");
+
+        foreach (GameObject weapon in weaponPrefabs)
+        {
+            Weapon.weapons.Add((int)weapon.GetComponent<Weapon>().weaponName, weapon);
+        }
+    }
+
+    public void CreateItem(int _weaponId, int _itemId, Vector3 _position)
+    {
+        GameObject prefab = GetWeapon(_weaponId);
+        GameObject _item = Instantiate(prefab, _position, prefab.transform.rotation);
+        _item.GetComponent<Weapon>().Initialize(_itemId);
+        items.Add(_itemId, _item.GetComponent<Weapon>());
+    }
+
+    private GameObject GetWeapon(int _weaponId)
+    {
+        return Weapon.weapons[_weaponId];
     }
 }

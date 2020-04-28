@@ -37,7 +37,7 @@ public class ClientSend : MonoBehaviour
     /// <param name="_inputs"></param>
     public static void PlayerMovement(bool[] _inputs)
     {
-        using (Packet _packet = new Packet((int)ClientPackets.playerMovement))
+        using (Packet _packet = new Packet((int)ClientPackets.playerInput))
         {
             _packet.Write(_inputs.Length);
             foreach (bool _input in _inputs)
@@ -49,5 +49,26 @@ public class ClientSend : MonoBehaviour
             SendUDPData(_packet);
         }
     }
+
+    public static void PlayerShoot(Vector3 _facing)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.playerShoot))
+        {
+            _packet.Write(_facing);
+
+            SendTCPData(_packet);
+        }
+    }
+
+    public static void PlayerDropWeapon(Vector3 _facing)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.playerDropWeapon))
+        {
+            _packet.Write(_facing);
+
+            SendTCPData(_packet);
+        }
+    }
+
     #endregion
 }
