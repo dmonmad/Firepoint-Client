@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,6 +66,16 @@ public class ClientSend : MonoBehaviour
         using (Packet _packet = new Packet((int)ClientPackets.playerDropWeapon))
         {
             _packet.Write(_facing);
+
+            SendTCPData(_packet);
+        }
+    }
+
+    public static void ChangeWeapon(int _index)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.changeWeapon))
+        {
+            _packet.Write(_index);
 
             SendTCPData(_packet);
         }

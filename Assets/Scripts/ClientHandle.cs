@@ -7,6 +7,8 @@ using UnityEngine;
 public class ClientHandle : MonoBehaviour
 {
 
+    public static int lastUpdateWeaponBulletsPacketId = 0;
+
     public static void Welcome(Packet _packet)
     {
         string _msg = _packet.ReadString();
@@ -51,6 +53,14 @@ public class ClientHandle : MonoBehaviour
     public static void PlayerDisconnected(Packet _packet)
     {
         int _id = _packet.ReadInt();
+
+        WeaponManager wm = GameManager.players[_id].GetComponent<WeaponManager>();
+        PlayerManager player = GameManager.players[_id].GetComponent<PlayerManager>();
+        if (wm && player)
+        {
+            Debug.Log("WM not null");
+            wm.DropAllWeapons(player.transform.forward, player.weaponDropper);
+        }
 
         Destroy(GameManager.players[_id].gameObject);
         GameManager.players.Remove(_id);
@@ -120,7 +130,7 @@ public class ClientHandle : MonoBehaviour
 
     }
 
-    internal static void PlayerThrowWeapon(Packet _packet)
+    public static void PlayerThrowWeapon(Packet _packet)
     {
         Debug.Log("Player throwing weapon");
 
@@ -134,6 +144,37 @@ public class ClientHandle : MonoBehaviour
         {
             Debug.Log("WM not null");
             wm.DropWeapon(_dropVector, player.weaponDropper);
+        }
+    }
+
+    public static void UpdateWeaponBullets(Packet _packet)
+    {
+        int _packetId = _packet.ReadInt();
+        int _itemId = _packet.ReadInt();
+        int _actualClip = _packet.ReadInt();
+        int _actualAmmo = _packet.ReadInt();
+
+        Debug.Log(_packetId + " AND LAST WAS " + lastUpdateWeaponBulletsPacketId);
+
+        if(_packetId > lastUpdateWeaponBulletsPacketId)
+        {
+            Debug.Log("Wtf");
+            lastUpdateWeaponBulletsPacketId = _packetId;
+            GameManager.items[_itemId].UpdateBullets(_actualClip, _actualAmmo);
+        }
+
+    }
+
+    public static void ChangeWeaponFromPlayer(Packet _packet)
+    {
+        int _fromPlayer = _packet.ReadInt();
+        int _index = _packet.ReadInt();
+
+        WeaponManager wm = GameManager.players[_fromPlayer].GetComponent<WeaponManager>();
+        if (wm)
+        {
+            Debug.Log("WM not null");
+            wm.ChangeWeapon(_index);
         }
     }
 }

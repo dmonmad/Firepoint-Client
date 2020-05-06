@@ -143,9 +143,12 @@ MonoBehaviour:
   weaponName: 6
   weaponTier: 0
   weaponShootType: 0
-  itemName: 
+  itemName: L96 Sniper
   model: {fileID: 0}
   modelCollider: {fileID: 0}
+  hudSprite: {fileID: 21300000, guid: 7676d58f96c4cad468f25472fbe7e842, type: 3}
+  shoot: {fileID: 0}
+  _shootOrigin: {fileID: 0}
   isReloading: 0
   preparingNextShot: 0
   isFiring: 0
@@ -153,9 +156,10 @@ MonoBehaviour:
   reloadTime: 3.5
   maxAmmo: 30
   ammo: 0
-  maxClip: 10
+  maxClip: 8
   clip: 0
   fireRate: 0.9
+  shotsPerSecond: 0
 --- !u!54 &7852752972289385954
 Rigidbody:
   m_ObjectHideFlags: 0

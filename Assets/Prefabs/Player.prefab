@@ -210,7 +210,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  SelectedWeapon: {fileID: 0}
+  shootingOrigin: {fileID: 0}
+  selectedIndex: -1
+  lastSelectedIndex: -1
   dropForce: 30
 --- !u!1 &9000943707523322281
 GameObject:

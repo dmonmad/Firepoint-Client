@@ -48,9 +48,12 @@ MonoBehaviour:
   weaponName: 4
   weaponTier: 0
   weaponShootType: 1
-  itemName: 
+  itemName: AK-47
   model: {fileID: 0}
   modelCollider: {fileID: 0}
+  hudSprite: {fileID: 21300000, guid: 1215866ac17f72644ac8cda1235ab7d3, type: 3}
+  shoot: {fileID: 0}
+  _shootOrigin: {fileID: 0}
   isReloading: 0
   preparingNextShot: 0
   isFiring: 0
@@ -60,7 +63,8 @@ MonoBehaviour:
   ammo: 0
   maxClip: 30
   clip: 0
-  fireRate: 2.1
+  fireRate: 11
+  shotsPerSecond: 0
 --- !u!54 &1580156369107107814
 Rigidbody:
   m_ObjectHideFlags: 0

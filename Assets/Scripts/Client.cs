@@ -35,8 +35,6 @@ public class Client : MonoBehaviour
 
     private void Start()
     {
-        tcp = new TCP();
-        udp = new UDP();
     }
 
     private void OnApplicationQuit()
@@ -45,9 +43,16 @@ public class Client : MonoBehaviour
     }
 
     /// <summary>Attempts to connect to the server.</summary>
-    public void ConnectToServer()
+    public void ConnectToServer(string[] wtf)
     {
+        instance.ip = wtf[0];
+        instance.port = int.Parse(wtf[1]);
+
+        tcp = new TCP();
+        udp = new UDP();
+
         InitializeClientData();
+
 
         isConnected = true;
         tcp.Connect(); // Connect tcp, udp gets connected once tcp is done
@@ -308,7 +313,9 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.createItemSpawner, ClientHandle.CreateItemSpawner },
             { (int)ServerPackets.itemSpawned, ClientHandle.ItemSpawned },
             { (int)ServerPackets.itemPickedUp, ClientHandle.ItemPickedUp },
-            { (int)ServerPackets.itemThrown, ClientHandle.PlayerThrowWeapon }
+            { (int)ServerPackets.itemThrown, ClientHandle.PlayerThrowWeapon },
+            { (int)ServerPackets.updateWeaponBullets, ClientHandle.UpdateWeaponBullets },
+            { (int)ServerPackets.playerChangedWeapon, ClientHandle.ChangeWeaponFromPlayer }
         };
         Debug.Log("Initialized packets.");
     }

@@ -69,7 +69,6 @@ public class GameManager : MonoBehaviour
 
     private void PopulateDictionaryWithWeapons()
     {
-        Debug.Log("Populating dictionary");
 
         foreach (GameObject weapon in weaponPrefabs)
         {

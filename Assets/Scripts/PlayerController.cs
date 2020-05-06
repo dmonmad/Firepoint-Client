@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        weaponManager = GetComponent<WeaponManager>();
+
     }
 
     private void Update()
@@ -37,17 +37,17 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Select Primary"))
         {
-            //Select first weapon
+            weaponManager.SelectWeapon(0);
         }
 
         if (Input.GetButtonDown("Select Secondary"))
         {
-            //Select second weapon
+            weaponManager.SelectWeapon(1);
         }
 
-        if (Input.GetButtonDown("Select Knife"))
+        if (Input.GetButtonDown("Select Tertiary"))
         {
-            //Select third weapon
+            weaponManager.SelectWeapon(2);
         }
 
         if (Input.GetButtonDown("Select Equipment"))
@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Change Weapon"))
         {
-            //select last weapon
+            weaponManager.SelectLastSelectedWeapon();
         }
 
     }

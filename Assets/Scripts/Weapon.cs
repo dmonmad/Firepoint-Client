@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,12 +38,15 @@ public class Weapon : MonoBehaviour
     public string itemName;
     public MeshRenderer model;
     public MeshCollider modelCollider;
+    public Sprite hudSprite;
 
     #region Weapon Sound
 
     public AudioClip shoot;
 
     #endregion
+
+    #region Weapon Variables
 
     public Transform _shootOrigin;
     public bool isReloading;
@@ -57,6 +61,8 @@ public class Weapon : MonoBehaviour
     public float fireRate = 0;
     public float shotsPerSecond = 0;
 
+    #endregion
+
     public void Initialize(int _itemId)
     {
         model = GetComponentInChildren<MeshRenderer>();
@@ -64,7 +70,7 @@ public class Weapon : MonoBehaviour
         itemId = _itemId;
         ammo = maxAmmo;
         clip = maxClip;
-        isReloading = true;
+        isReloading = false;
         isNextShotReady = true;
         preparingNextShot = false;
         isFiring = false;
@@ -116,7 +122,7 @@ public class Weapon : MonoBehaviour
             }
             else
             {
-                StartCoroutine(Reload());
+                //StartCoroutine(Reload());
                 return false;
             }
         }
@@ -150,7 +156,6 @@ public class Weapon : MonoBehaviour
         ClientSend.PlayerShoot(_shootDirection);
         isFiring = true;
         isNextShotReady = false;
-        clip--;
 
         if (!preparingNextShot)
         {
@@ -162,7 +167,6 @@ public class Weapon : MonoBehaviour
     {
         ClientSend.PlayerShoot(_shootDirection);
         isNextShotReady = false;
-        clip--;
 
         if (!preparingNextShot)
         {
@@ -170,12 +174,17 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    IEnumerator Reload()
+    public void UpdateBullets(int actualClip, int actualAmmo)
     {
-        isReloading = true;
-        yield return new WaitForSeconds(reloadTime);
-        clip = maxClip;
-        isReloading = false;
+        clip = actualClip;
+        ammo = actualAmmo;
     }
 
+    private void OnEnable()
+    {
+        if (preparingNextShot)
+        {
+            StartCoroutine(PrepareNextShot());
+        }
+    }
 }
