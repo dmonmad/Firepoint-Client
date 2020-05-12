@@ -11,14 +11,13 @@ public class WeaponManager : MonoBehaviour
     public Image[] InventoryHudSlots = new Image[3];
     public TextMeshProUGUI bulletsText;
     public Image bulletIcon;
-    public int selectedIndex;
-    public int SelectedWeapon = -1;
-    public int lastSelectedIndex = -1;
-    public float dropForce = 30f;
+    public GameObject selectedWeapon;
+    public GameObject lastSelectedWeapon;
+    public float dropForce = 100f;
 
     public void Start()
     {
-        selectedIndex = -1;
+        selectedWeapon = null;
     }
 
     public void Update()
@@ -30,14 +29,14 @@ public class WeaponManager : MonoBehaviour
     {
         if (InventoryWeapons[_index] != null)
         {
-            if (_index != selectedIndex)
+            if (InventoryWeapons[_index] != selectedWeapon)
             {
                 ClientSend.ChangeWeapon(_index);
-                DeselectWeaponImage(InventoryHudSlots[selectedIndex]);
-                InventoryWeapons[selectedIndex].SetActive(false);
-                selectedIndex = _index;
-                SelectWeaponImage(InventoryHudSlots[selectedIndex]);
-                InventoryWeapons[selectedIndex].SetActive(true);
+                DeselectWeaponImage(InventoryHudSlots[GetWeaponIndex(selectedWeapon)]);
+                selectedWeapon.SetActive(false);
+                selectedWeapon = InventoryWeapons[_index];
+                SelectWeaponImage(InventoryHudSlots[GetWeaponIndex(selectedWeapon)]);
+                selectedWeapon.SetActive(true);
             }
         }
     }
@@ -46,11 +45,13 @@ public class WeaponManager : MonoBehaviour
     {
         if (InventoryWeapons[_index] != null)
         {
-            if (_index != selectedIndex)
+            if (InventoryWeapons[_index] != selectedWeapon)
             {
-                InventoryWeapons[selectedIndex].SetActive(false);
-                selectedIndex = _index;
-                InventoryWeapons[selectedIndex].SetActive(true);
+                if (selectedWeapon)
+                    selectedWeapon.SetActive(false);
+
+                selectedWeapon = InventoryWeapons[_index];
+                selectedWeapon.SetActive(true);
             }
         }
     }
@@ -67,22 +68,20 @@ public class WeaponManager : MonoBehaviour
                 _itemObj.transform.rotation = new Quaternion(0, 0, 0, 0);
                 PickupWeaponImage(InventoryHudSlots[i], _itemObj.GetComponent<Weapon>().hudSprite);
 
-                if (selectedIndex != -1)
+                if (selectedWeapon != null)
                 {
                     _itemObj.SetActive(false);
                     DeselectWeaponImage(InventoryHudSlots[i]);
                 }
                 else
                 {
-                    selectedIndex = i;
+                    selectedWeapon = InventoryWeapons[i];
                     SelectWeaponImage(InventoryHudSlots[i]);
-                    Debug.Log("Setting image");
                 }
 
                 Rigidbody _rb = _itemObj.GetComponent<Rigidbody>();
                 if (_rb)
                 {
-                    Debug.Log("DESACTIVANDO RB FROM " + _rb.name);
                     _rb.isKinematic = true;
                     break;
                 }
@@ -94,36 +93,36 @@ public class WeaponManager : MonoBehaviour
 
     public void SelectLastSelectedWeapon()
     {
-        if (lastSelectedIndex != -1)
+        if (lastSelectedWeapon != null)
         {
-            if (InventoryWeapons[lastSelectedIndex] != null)
+            if (lastSelectedWeapon != null)
             {
-                SelectWeapon(lastSelectedIndex);
+                SelectWeapon(GetWeaponIndex(lastSelectedWeapon));
             }
             else
             {
-                lastSelectedIndex = -1;
+                lastSelectedWeapon = null;
             }
         }
     }
 
     public void DropWeapon(Vector3 _dropVector, Transform _weaponDropper)
     {
-        if (InventoryWeapons[selectedIndex] != null)
+        if (selectedWeapon != null)
         {
-            Debug.Log("Has selected weapon");
-            if (InventoryWeapons[selectedIndex].activeInHierarchy)
+            Debug.Log("WM - DROPWEAPON - Has selected weapon");
+            if (selectedWeapon.activeInHierarchy)
             {
-                Debug.Log("Getting rb");
-                Rigidbody _rb = InventoryWeapons[selectedIndex].GetComponent<Rigidbody>();
+                Debug.Log("WM - DROPWEAPON - Getting rb");
+                Rigidbody _rb = selectedWeapon.GetComponent<Rigidbody>();
                 if (_rb)
                 {
-                    Debug.Log("Throwing weapon");
-                    InventoryWeapons[selectedIndex].transform.parent = null;
-                    InventoryWeapons[selectedIndex].transform.position = _weaponDropper.position;
-                    InventoryWeapons[selectedIndex] = null;
-                    ClearWeaponImage(InventoryHudSlots[selectedIndex]);
-                    selectedIndex = -1;
+                    Debug.Log("WM - DROPWEAPON - Throwing weapon");
+                    ClearWeaponImage(InventoryHudSlots[GetWeaponIndex(selectedWeapon)]);
+                    selectedWeapon.transform.parent = null;
+                    selectedWeapon.transform.position = _weaponDropper.position;
+                    selectedWeapon = null;
+                    selectedWeapon = null;
                     _rb.isKinematic = false;
                     _rb.AddForce(gameObject.transform.forward * dropForce, ForceMode.Force);
                 }
@@ -136,7 +135,7 @@ public class WeaponManager : MonoBehaviour
 
         if (IsWeaponSelected())
         {
-            if (InventoryWeapons[selectedIndex].GetComponent<Weapon>().Shoot(_camTransform))
+            if (selectedWeapon.GetComponent<Weapon>().Shoot(_camTransform))
             {
                 Debug.Log("WeaponManager -> Shoot = true");
             }
@@ -147,22 +146,15 @@ public class WeaponManager : MonoBehaviour
     {
         if (IsWeaponSelected())
         {
-            InventoryWeapons[selectedIndex].GetComponent<Weapon>().StopFiring();
+            selectedWeapon.GetComponent<Weapon>().StopFiring();
         }
     }
 
     public bool IsWeaponSelected()
     {
-        if (selectedIndex != -1)
+        if (selectedWeapon != null)
         {
-            if (InventoryWeapons[selectedIndex])
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return true;
         }
         else
         {
@@ -172,6 +164,7 @@ public class WeaponManager : MonoBehaviour
 
     public void PickupWeaponImage(Image _image, Sprite _sprite)
     {
+        Debug.Log("PICKUP WEAPON IMAGE");
         if (_image)
         {
             _image.sprite = _sprite;
@@ -181,6 +174,7 @@ public class WeaponManager : MonoBehaviour
 
     public void SelectWeaponImage(Image _image)
     {
+        Debug.Log("SELECT WEAPON IMAGE");
         if (_image)
         {
             _image.color = Constants.WeaponSpriteSelected;
@@ -189,6 +183,7 @@ public class WeaponManager : MonoBehaviour
 
     public void ClearWeaponImage(Image _image)
     {
+        Debug.Log("CLEAR WEAPON IMAGE");
         if (_image)
         {
             _image.sprite = null;
@@ -198,6 +193,7 @@ public class WeaponManager : MonoBehaviour
 
     public void DeselectWeaponImage(Image _image)
     {
+        Debug.Log("DESELECTING WEAPON IMAGE");
         if (_image)
         {
             _image.color = Constants.WeaponSpriteUnselected;
@@ -210,7 +206,7 @@ public class WeaponManager : MonoBehaviour
         {
             if (bulletsText && bulletIcon)
             {
-                bulletsText.SetText(FormattedBullets(InventoryWeapons[selectedIndex].GetComponent<Weapon>()));
+                bulletsText.SetText(FormattedBullets(selectedWeapon.GetComponent<Weapon>()));
                 bulletIcon.enabled = true;
             }
         }
@@ -230,9 +226,12 @@ public class WeaponManager : MonoBehaviour
     {
         for (int i = 0; i < InventoryWeapons.Length; i++)
         {
+            Debug.Log(i);
             if (InventoryWeapons[i])
             {
-                selectedIndex = i;
+                selectedWeapon = InventoryWeapons[i];
+                Debug.Log(selectedWeapon);
+                selectedWeapon.SetActive(true);
                 DropWeapon(gameObject.transform.forward, _weaponDropper);
             }
         }
@@ -241,5 +240,20 @@ public class WeaponManager : MonoBehaviour
     public string FormattedBullets(Weapon _weapon)
     {
         return _weapon.clip + " / " + _weapon.ammo;
+    }
+
+    public int GetWeaponIndex(GameObject _weapon)
+    {
+        for (int i = 0; i < InventoryWeapons.Length; i++)
+        {
+            if (_weapon != null && InventoryWeapons[i] != null)
+            {
+                if (_weapon.Equals(InventoryWeapons[i]))
+                {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 }

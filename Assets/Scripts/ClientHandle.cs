@@ -95,36 +95,22 @@ public class ClientHandle : MonoBehaviour
         int _weaponId = _packet.ReadInt();
         int _itemId = _packet.ReadInt();
         Vector3 _position = _packet.ReadVector3();
+        int _heldBy = _packet.ReadInt();
+        int _bullets = _packet.ReadInt();
+        int _ammo = _packet.ReadInt();
 
-        GameManager.instance.CreateItem(_weaponId, _itemId, _position);
-    }
-
-    public static void ItemSpawned(Packet _packet)
-    {
-        int _itemId = _packet.ReadInt();
-
-        GameManager.items[_itemId].ItemSpawned();
+        GameManager.instance.CreateItem(_weaponId, _itemId, _position, _heldBy, _bullets, _ammo);
     }
 
     public static void ItemPickedUp(Packet _packet)
     {
-        Debug.Log("Reciviendo item");
         int _itemId = _packet.ReadInt();
         int _byPlayer = _packet.ReadInt();
-
-
-        foreach(PlayerManager pm in GameManager.players.Values)
-        {
-            Debug.Log(pm.name + " / " + pm.id);
-        }
-
-        Debug.Log("Tried " + _byPlayer);
         
         WeaponManager wm = GameManager.players[_byPlayer].GetComponent<WeaponManager>();
 
         if (wm)
         {
-            Debug.Log("WM not null");
             wm.PickupWeapon(GameManager.items[_itemId].gameObject, GameManager.players[_byPlayer].weaponHolder);
         }
 
@@ -142,7 +128,7 @@ public class ClientHandle : MonoBehaviour
 
         if (wm && player)
         {
-            Debug.Log("WM not null");
+            Debug.Log("CH - WM PLAYER - WM not null");
             wm.DropWeapon(_dropVector, player.weaponDropper);
         }
     }
@@ -154,11 +140,8 @@ public class ClientHandle : MonoBehaviour
         int _actualClip = _packet.ReadInt();
         int _actualAmmo = _packet.ReadInt();
 
-        Debug.Log(_packetId + " AND LAST WAS " + lastUpdateWeaponBulletsPacketId);
-
         if(_packetId > lastUpdateWeaponBulletsPacketId)
         {
-            Debug.Log("Wtf");
             lastUpdateWeaponBulletsPacketId = _packetId;
             GameManager.items[_itemId].UpdateBullets(_actualClip, _actualAmmo);
         }
@@ -173,7 +156,6 @@ public class ClientHandle : MonoBehaviour
         WeaponManager wm = GameManager.players[_fromPlayer].GetComponent<WeaponManager>();
         if (wm)
         {
-            Debug.Log("WM not null");
             wm.ChangeWeapon(_index);
         }
     }

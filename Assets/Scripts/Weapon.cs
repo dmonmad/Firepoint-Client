@@ -85,12 +85,6 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    public void ItemSpawned()
-    {
-        //hasItem = true;
-        //model.enabled = true;
-    }
-
     public void WeaponDropped()
     {
         modelCollider.enabled = true;

@@ -712,6 +712,7 @@ MonoBehaviour:
   health: 0
   maxHealth: 100
   model: {fileID: 385094393516893308}
+  weaponEquipped: {fileID: 0}
   weaponHolder: {fileID: 5660900088388548981}
   weaponDropper: {fileID: 1033717258568818640}
   healthBar: {fileID: 2212972127253913034}
@@ -754,10 +755,9 @@ MonoBehaviour:
   - {fileID: 3384620770209965786}
   bulletsText: {fileID: 9197231116227901269}
   bulletIcon: {fileID: 8652647803968828016}
-  selectedIndex: -1
-  SelectedWeapon: -1
-  lastSelectedIndex: -1
-  dropForce: 30
+  selectedWeapon: {fileID: 0}
+  lastSelectedWeapon: {fileID: 0}
+  dropForce: 100
 --- !u!1 &4481812318435238891
 GameObject:
   m_ObjectHideFlags: 0

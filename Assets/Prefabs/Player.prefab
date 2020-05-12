@@ -53,14 +53,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2704768786036500608}
-  m_LocalRotation: {x: 0, y: 0.76604444, z: 0, w: 0.64278764}
+  m_LocalRotation: {x: 0, y: 0.67559016, z: 0, w: 0.7372774}
   m_LocalPosition: {x: 0.323, y: 0.282, z: 0.623}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4229475372107435100}
   m_Father: {fileID: 804183990590123507}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 100, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 85, z: 0}
 --- !u!1 &3280444725120954597
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,8 +192,11 @@ MonoBehaviour:
   health: 0
   maxHealth: 100
   model: {fileID: 871309561423826508}
+  weaponEquipped: {fileID: 0}
   weaponHolder: {fileID: 6067932823214819960}
   weaponDropper: {fileID: 4229475372107435100}
+  healthBar: {fileID: 0}
+  healthText: {fileID: 0}
 --- !u!114 &-5850185738620412774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,14 +209,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 150c755d607b09247b573e8348919e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Inventory:
+  InventoryWeapons:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  shootingOrigin: {fileID: 0}
-  selectedIndex: -1
-  lastSelectedIndex: -1
-  dropForce: 30
+  InventoryHudSlots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  bulletsText: {fileID: 0}
+  bulletIcon: {fileID: 0}
+  selectedWeapon: {fileID: 0}
+  lastSelectedWeapon: {fileID: 0}
+  dropForce: 100
 --- !u!1 &9000943707523322281
 GameObject:
   m_ObjectHideFlags: 0

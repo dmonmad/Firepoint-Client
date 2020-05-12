@@ -76,12 +76,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CreateItem(int _weaponId, int _itemId, Vector3 _position)
+    public void CreateItem(int _weaponId, int _itemId, Vector3 _position, int _heldBy, int _bullets, int _ammo)
     {
         GameObject prefab = GetWeapon(_weaponId);
         GameObject _item = Instantiate(prefab, _position, prefab.transform.rotation);
         _item.GetComponent<Weapon>().Initialize(_itemId);
         items.Add(_itemId, _item.GetComponent<Weapon>());
+
+        if(_heldBy != -1)
+        {
+            players[_heldBy].GetComponent<WeaponManager>().PickupWeapon(_item, players[_heldBy].weaponHolder);
+        }
     }
 
     private GameObject GetWeapon(int _weaponId)
