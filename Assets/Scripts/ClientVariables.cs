@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class ClientVariables : MonoBehaviour
 {
-    public static float DecalDestroyTime = 10f;
+    public static float DECAL_DESTROY_TIME = 10f;
 }

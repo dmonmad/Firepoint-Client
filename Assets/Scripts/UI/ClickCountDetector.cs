@@ -17,21 +17,21 @@ public class ClickCountDetector : MonoBehaviour, IPointerClickHandler
             OnMultiClick();
     }
 
+    /// <summary>Detects a single click</summary>
     void OnSingleClick()
     {
-        Debug.Log("Single Clicked");
+        //Debug.Log("Single Clicked");
     }
 
+    /// <summary>Detects a double click.</summary>
     void OnDoubleClick()
     {
-
-        Console.GetInstance().Log(this.gameObject.GetComponent<ServerObjectModel>().ip.GetParsedText());
         UIManager.instance.ConnectToServer(this.gameObject.GetComponent<ServerObjectModel>().ip.GetParsedText());
-        Console.GetInstance().Log("Trying to connect");
     }
 
+    /// <summary>Detects a multiple click.</summary>
     void OnMultiClick()
     {
-        Debug.Log("MultiClick Clicked");
+        //Debug.Log("MultiClick Clicked");
     }
 }

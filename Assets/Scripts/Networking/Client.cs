@@ -33,23 +33,23 @@ public class Client : MonoBehaviour
         }
     }
 
+    /// <summary>Disconnects before closing the game.</summary>
     private void OnApplicationQuit()
     {
         Disconnect(); // Disconnect when the game is closed
     }
 
     /// <summary>Attempts to connect to the server.</summary>
-    public void ConnectToServer(string[] wtf)
+    public void ConnectToServer(string[] ipport)
     {
-        instance.ip = wtf[0];
-        instance.port = int.Parse(wtf[1]);
+        instance.ip = ipport[0];
+        instance.port = int.Parse(ipport[1]);
 
         tcp = new TCP();
         udp = new UDP();
 
         InitializeClientData();
         tcp.Connect(this); // Connect tcp, udp gets connected once tcp is done
-        Debug.Log("xd");
         isConnected = true;
     }
 
@@ -79,7 +79,6 @@ public class Client : MonoBehaviour
         private void ConnectCallback(IAsyncResult _result)
         {
 
-            Debug.Log("Connect callback");
             try
             {
                 socket.EndConnect(_result);
@@ -87,18 +86,16 @@ public class Client : MonoBehaviour
             catch (Exception ex)
             {
                 ThreadManager.ExecuteOnMainThread(() => UIManager.instance.DisconnectedFromServer());
-                Debug.Log("No se pudo conectar al servidor");
-                Console.GetInstance().Log("No se pudo conectar al servidor");
-                Debug.Log("WATRETAETFREASRFAE");
+                Console.GetInstance().Log("Couldn't reach the server");
             }
-
-            Debug.Log("Connect callback after catch");
 
             if (!socket.Connected)
             {
                 return;
             }
-            
+
+            Console.GetInstance().Log("Connected successfully");
+
             stream = socket.GetStream();
 
             receivedData = new Packet();
@@ -122,7 +119,6 @@ public class Client : MonoBehaviour
             catch (Exception _ex)
             {
                 Debug.Log($"Error sending data to server via TCP: {_ex}");
-                Console.GetInstance().Log($"Error sending data to server via TCP: {_ex}");
             }
         }
 
@@ -152,7 +148,7 @@ public class Client : MonoBehaviour
         }
 
         /// <summary>Prepares received data to be used by the appropriate packet handler methods.</summary>
-        /// <param name="_data">The recieved data.</param>
+        /// <param name="_data">The received data.</param>
         private bool HandleData(byte[] _data)
         {
             int _packetLength = 0;
@@ -256,7 +252,6 @@ public class Client : MonoBehaviour
             catch (Exception _ex)
             {
                 Debug.Log($"Error sending data to server via UDP: {_ex}");
-                Console.GetInstance().Log($"Error sending data to server via UDP: {_ex}");
             }
         }
 
@@ -337,7 +332,7 @@ public class Client : MonoBehaviour
     }
 
     /// <summary>Disconnects from the server and stops all network traffic.</summary>
-    private void Disconnect()
+    public void Disconnect()
     {
         if (isConnected)
         {
@@ -357,7 +352,6 @@ public class Client : MonoBehaviour
             }
             GameManager.items.Clear();
 
-            Debug.Log("Disconnected from server.");
             Console.GetInstance().Log("Disconnected from server.");
         }
     }

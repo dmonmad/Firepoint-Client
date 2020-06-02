@@ -27,6 +27,7 @@ public class CameraController : MonoBehaviour
         Debug.DrawRay(transform.position, transform.forward * 2, Color.red);
     }
 
+    /// <summary>Enable camera's rotation in certain values.</summary>
     private void Look()
     {
         float _mouseVertical = -Input.GetAxis("Mouse Y");

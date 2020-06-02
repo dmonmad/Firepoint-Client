@@ -31,6 +31,8 @@ public class Console : MonoBehaviour
         return instance;        
     }
 
+    /// <summary>Adds the line to the text log.</summary>
+    /// <param name="line">Line that should be added to the log.</param>
     public void Log(string line)
     {
         Debug.Log(line);
@@ -40,6 +42,7 @@ public class Console : MonoBehaviour
         }
     }
 
+    /// <summary>Disables the console's object.</summary>
     public void CloseConsole()
     {
         if (console.activeInHierarchy)

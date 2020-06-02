@@ -18,6 +18,10 @@ public class RestClient
         return _instance;
     }
 
+    /// <summary>Sends a request to a url and throws the formatted result back.</summary>
+    /// <param name="url">Url of the master server.</param>
+    /// <param name="callBack">The callback function.</param>
+    /// <returns>Returns a list of ServerModels</returns>
     public IEnumerator Get(string url, System.Action<ServerList> callBack)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(url))
@@ -26,7 +30,7 @@ public class RestClient
 
             if (www.isNetworkError)
             {
-                Debug.LogError("Client couldn't connect with master-server: \n[" + www.error + "]");
+                Console.GetInstance().Log("Client couldn't connect with master-server: \n[" + www.error + "]");
             }
             else
             {

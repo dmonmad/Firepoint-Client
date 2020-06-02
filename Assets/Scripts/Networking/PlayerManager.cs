@@ -23,6 +23,9 @@ public class PlayerManager : MonoBehaviour
 
     private Dictionary<MeshRenderer, bool> objectsSavedState = new Dictionary<MeshRenderer, bool>();
 
+    /// <summary>Initializes the player with the given id and username
+    /// <param name="_id">The player's username.</param>
+    /// <param name="_username">The player's username.</param>
     public void Initialize(int _id, string _username)
     {
         id = _id;
@@ -34,6 +37,9 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    /// <summary>Sets the player's health and, if under 0 after setting it, kills the player with a message
+    /// <param name="_health">The player's new health.</param>
+    /// <param name="_attackerId">The attacker's id.</param>
     public void SetHealth(float _health, int _attackerId)
     {
         health = _health;
@@ -46,11 +52,12 @@ public class PlayerManager : MonoBehaviour
 
         if (health <= 0f)
         {
-            Console.GetInstance().Log($"El jugador "+GameManager.players[_attackerId].username+" ha asesinado a "+username);
+            Console.GetInstance().Log($"{GameManager.players[_attackerId].username} killed { username}");
             Die();
         }
     }
 
+    /// <summary>Kills the palyer, setting health to 0 and disabling mesh renderers
     public void Die()
     {
         for (int i = 0; i < gameObject.transform.childCount; i++)
@@ -65,6 +72,7 @@ public class PlayerManager : MonoBehaviour
         model.enabled = false;
     }
 
+    /// <summary>Respawns the player, setting full health and enabling mesh renderers
     public void Respawn()
     {
         foreach(MeshRenderer _model in objectsSavedState.Keys)
@@ -75,5 +83,7 @@ public class PlayerManager : MonoBehaviour
         objectsSavedState.Clear();
 
         SetHealth(maxHealth, -1);
+
+        Console.GetInstance().Log($"{username} has respawned!");
     }
 }

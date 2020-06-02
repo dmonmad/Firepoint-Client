@@ -9,6 +9,7 @@ public class ServerBrowser : MonoBehaviour
     public GameObject ServerObjectTemplate;
     public Transform ServerObjectContainer;
 
+    /// <summary>Clears the created servers, stop the active searchs and starts a new one.</summary>
     public void GetServers()
     {
         ClearServers();
@@ -16,6 +17,8 @@ public class ServerBrowser : MonoBehaviour
         StartCoroutine(RestClient.GetInstance().Get(Constants.MASTERSERVER_URL, UpdateServerList));
     }
 
+    /// <summary>Proccesses the given ServerModel list.</summary>
+    /// <param name="_serverList">Adds each server to the server browser object.</param>
     public void UpdateServerList(ServerList _serverList)
     {
         foreach(ServerModel _server in _serverList.servers)
@@ -26,6 +29,7 @@ public class ServerBrowser : MonoBehaviour
         }
     }
 
+    /// <summary>Destroy the server's objects and clears the list.</summary>
     public void ClearServers()
     {
         for (int i = 0; i < ServerObjectList.Count; i++)
@@ -40,6 +44,7 @@ public class ServerBrowser : MonoBehaviour
         GetServers();
     }
 
+    /// <summary>Disables the Server Browser's object.</summary>
     public void CloseServerBrowser()
     {
         this.gameObject.SetActive(false);

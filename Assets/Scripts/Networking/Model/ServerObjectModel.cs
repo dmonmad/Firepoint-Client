@@ -10,6 +10,10 @@ public class ServerObjectModel : MonoBehaviour
     public TextMeshProUGUI ip;
     public TextMeshProUGUI ping;
 
+    /// <summary>Initalizes the object with values.</summary>
+    /// <param name="_name">Server's name.</param>
+    /// <param name="_ip">Server's ip.</param>
+    /// <param name="_ping">Server's ping.</param>
     public void Initialize(string _name, string _ip, string _ping)
     {
         servername.SetText(_name);

@@ -28,6 +28,9 @@ public class WeaponManager : MonoBehaviour
         UpdateBullets();
     }
 
+
+    /// <summary>Changes the selected weapon to the new one(only used by local player).</summary>
+    /// <param name="_index">The index of the weapon to change in the inventory.</param>
     public void SelectWeapon(int _index)
     {
         if (InventoryWeapons[_index] != null)
@@ -37,7 +40,6 @@ public class WeaponManager : MonoBehaviour
                 ClientSend.ChangeWeapon(_index);
                 if (selectedWeapon)
                 {
-                    Debug.Log(GetWeaponIndex(selectedWeapon));
                     DeselectWeaponImage(InventoryHudSlots[GetWeaponIndex(selectedWeapon)]);
                     selectedWeapon.SetActive(false);
                 }
@@ -48,6 +50,9 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+
+    /// <summary>Changes the selected weapon to the new one(used by remote players).</summary>
+    /// <param name="_index">The index of the weapon to change in the inventory.</param>
     public void ChangeWeapon(int _index)
     {
         if (InventoryWeapons[_index] != null)
@@ -63,6 +68,10 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    /// <summary>Picks a weapon up, updates the inventory and the HUD, disables its rigidbody and 
+    /// sets the layer so only the player sees it over the meshes</summary>
+    /// <param name="_itemObj">The item that needs to be picked up.</param>
+    /// <param name="_weaponHolder">The position where the weapon will be if picked up.</param>
     public void PickupWeapon(GameObject _itemObj, Transform _weaponHolder)
     {
         for (int i = 0; i < InventoryWeapons.Length; i++)
@@ -105,6 +114,7 @@ public class WeaponManager : MonoBehaviour
 
     }
 
+    /// <summary>Selects the last selected weapon if there's one.</summary>
     public void SelectLastSelectedWeapon()
     {
         if (lastSelectedWeapon != null)
@@ -120,6 +130,9 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    /// <summary>Drops the weapon if possible, clears the inventory and hud, sets the original layers again and makes it affected by gravity.</summary>
+    /// <param name="_dropVector">The vector the weapon will follow if dropped.</param>
+    /// <param name="_weaponDropper">The position from where the weapon will be dropped.</param>
     public void DropWeapon(Vector3 _dropVector, Transform _weaponDropper)
     {
         if (selectedWeapon != null)
@@ -147,18 +160,17 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    /// <summary>Fires the weapon if one is selected.</summary>
+    /// <param name="_camTransform">The origin of the shoot.</param>
     public void FireWeapon(Transform _camTransform)
     {
-
         if (IsWeaponSelected())
         {
-            if (selectedWeapon.GetComponent<Weapon>().Shoot(_camTransform))
-            {
-                Debug.Log("WeaponManager -> Shoot = true");
-            }
+            selectedWeapon.GetComponent<Weapon>().Shoot(_camTransform);
         }
     }
 
+    /// <summary>Stops firing the weapon.</summary>
     public void StopFiringWeapon()
     {
         if (IsWeaponSelected())
@@ -167,6 +179,8 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    /// <summary>Changes the image's color to clear.</summary>
+    /// <returns>Returns true if a weapon is selected, false if else</returns>
     public bool IsWeaponSelected()
     {
         if (selectedWeapon != null)
@@ -179,6 +193,18 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    /// <summary>Simulates a shot from the weapon.</summary>
+    public void Shot()
+    {
+        if (selectedWeapon)
+        {
+            selectedWeapon.GetComponent<Weapon>().Shot();
+        }
+    }
+
+    /// <summary>Changes the image's color to clear.</summary>
+    /// <param name="_image">The image which sprite's color must be changed.</param>
+    /// <param name="_sprite">The sprite to which the weapon sprite should be changed.</param>
     public void PickupWeaponImage(Image _image, Sprite _sprite)
     {
         if (_image)
@@ -188,6 +214,8 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    /// <summary>Changes the image's color to selected.</summary>
+    /// <param name="_image">The image which sprite's color must be changed.</param>
     public void SelectWeaponImage(Image _image)
     {
         if (_image)
@@ -196,14 +224,8 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    public void Shot()
-    {
-        if (selectedWeapon)
-        {
-            selectedWeapon.GetComponent<Weapon>().Shot();
-        }
-    }
-
+    /// <summary>Changes the image's color to clear.</summary>
+    /// <param name="_image">The image which sprite's color must be changed.</param>
     public void ClearWeaponImage(Image _image)
     {
         if (_image)
@@ -212,7 +234,9 @@ public class WeaponManager : MonoBehaviour
             _image.color = Constants.WEAPON_SPRITE_CLEAR;
         }
     }
-
+    
+    /// <summary>Changes the image's color to unselected.</summary>
+    /// <param name="_image">The image which sprite's color must be changed.</param>
     public void DeselectWeaponImage(Image _image)
     {
         if (_image)
@@ -221,6 +245,8 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+
+    /// <summary>Updates the bullets in the hud.</summary>
     public void UpdateBullets()
     {
         if (IsWeaponSelected())
@@ -241,9 +267,10 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-
-
-    public void DropAllWeapons(Vector3 dropVector, Transform _weaponDropper)
+    /// <summary>Drops all the weapons holded by the player.</summary>
+    /// <param name="_dropVector">The vector the weapon will follow if dropped.</param>
+    /// <param name="_weaponDropper">The position where the weapons will be initially dropped.</param>
+    public void DropAllWeapons(Vector3 _dropVector, Transform _weaponDropper)
     {
         for (int i = 0; i < InventoryWeapons.Length; i++)
         {
@@ -256,11 +283,17 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    /// <summary>Formats bullets and ammo left in a weapon.</summary>
+    /// <param name="_weapon">The weapons from which the bullets will be returned.</param>
+    /// <returns>Returns bullets in "A / B" format</returns>
     public string FormattedBullets(Weapon _weapon)
     {
         return _weapon.clip + " / " + _weapon.ammo;
     }
 
+    /// <summary>Finds the index of a GameObject in the inventory.</summary>
+    /// <param name="_weapon">The GameObject of the weapon from which the id must be found</param>
+    /// <returns>Index of the weapon in the inventory or -1 if it doesn't exists in it</returns>
     public int GetWeaponIndex(GameObject _weapon)
     {
         for (int i = 0; i < InventoryWeapons.Length; i++)

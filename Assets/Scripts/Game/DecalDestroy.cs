@@ -7,6 +7,6 @@ public class DecalDestroy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Destroy(this.gameObject, ClientVariables.DecalDestroyTime);
+        Destroy(this.gameObject, ClientVariables.DECAL_DESTROY_TIME);
     }
 }

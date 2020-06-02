@@ -36,6 +36,8 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>Locks or unlocks the weapon.</summary>
+    /// <param name="lockMouse">Should the mouse be locked.</param>
     private void ToggleCursorMode(bool lockMouse)
     {
         if (!Client.instance.isConnected)
@@ -67,6 +69,8 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>Proccesses the text to get the ip and the port then tries to connect to the server.</summary>
+    /// <param name="ipwithport">Line that should be added to the log.</param>
     public void ConnectToServer(string ipwithport)
     {
         Console.GetInstance().Log("Connecting to server");
@@ -79,9 +83,10 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            Console.GetInstance().Log("IP no valida");
+            Console.GetInstance().Log("Invalid IP");
         }
     }
+
     /// <summary>Client disconnected from the server.</summary>
     public void DisconnectedFromServer()
     {
@@ -89,15 +94,16 @@ public class UIManager : MonoBehaviour
         connectButton.interactable = true;
         usernameField.interactable = true;
     }
+
     /// <summary>Client has connected to a server.</summary>
     public void ConnectedToServer()
     {
-        Debug.Log("CONNECTEDTOSERVERCALLED");
         SwitchMainMenu();
         connectButton.interactable = false;
         usernameField.interactable = false;
     }
 
+    /// <summary>Proccesses the text to get the ip and the port(from Direct Connection).</summary>
     public string[] GetIpAndPort()
     {
         string text = ipPortField.text;
@@ -126,44 +132,36 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>Proccesses the text to get the ip and the port(from Server Browser).</summary>
+    /// <param name="text">Line that should be added to the log.</param>
     public string[] GetIpAndPort(string text)
     {
-        Console.GetInstance().Log(text);
-        Console.GetInstance().Log("GetIpAndPort(text)");
         string[] ipport = new string[2];
 
-        Console.GetInstance().Log("1");
         int colonIndex = text.IndexOf(':');
 
-        Console.GetInstance().Log("2");
         if (colonIndex == -1)
         {
-            Console.GetInstance().Log("3");
             return null;
         }
         else
         {
-            Console.GetInstance().Log("4");
             ipport[0] = text.Substring(0, colonIndex);
             ipport[1] = text.Substring(colonIndex + 1);
 
-            Console.GetInstance().Log("5");
             try
             {
-                Console.GetInstance().Log("6");
                 int.Parse(ipport[1]);
-                Console.GetInstance().Log("7");
             }
             catch (Exception)
             {
-                Console.GetInstance().Log("8");
                 return null;
             }
-            Console.GetInstance().Log("Returning " + ipport);
             return ipport;
         }
     }
 
+    /// <summary>Enables and disables the Server Browser's object.</summary>
     public void SwitchServerBrowser()
     {
         if (serverBrowser.activeInHierarchy)
@@ -182,6 +180,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>Enables and disables the Direct Connection's object.</summary>
     public void SwitchDirectConnection()
     {
         if (directConnection.activeInHierarchy)
@@ -200,6 +199,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>Enables and disables the Main Menu's object.</summary>
     public void SwitchMainMenu()
     {
         if (Client.instance.isConnected)
@@ -217,6 +217,8 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>Check if the main menu is open.</summary>
+    /// <returns>Returns true if MainMenu is open</returns>
     public bool IsUIOpen()
     {
         if (mainMenu.activeInHierarchy)
@@ -226,6 +228,7 @@ public class UIManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>Closes the game.</summary>
     public void Exit()
     {
             Application.Quit(0);

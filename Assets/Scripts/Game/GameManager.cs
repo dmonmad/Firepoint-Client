@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
         
     }
 
+    /// <summary>Populates the Weapon's Dictionary with weapons by ID.</summary>
     private void PopulateDictionaryWithWeapons()
     {
 
@@ -76,6 +77,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>Spawns a weapon and sets its owner if it has one.</summary>
+    /// <param name="_weaponId">Weapon's prefab's id.</param>
+    /// <param name="_itemId">Weapon's object's id.</param>
+    /// <param name="_position">Weapon's position.</param>
+    /// <param name="_heldBy">Weapon's holder's id.</param>
+    /// <param name="_bullets">Weapon's bullets.</param>
+    /// <param name="_ammo">Weapon's ammo.</param>
     public void CreateItem(int _weaponId, int _itemId, Vector3 _position, int _heldBy, int _bullets, int _ammo)
     {
         GameObject prefab = GetWeapon(_weaponId);
@@ -89,6 +97,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>Get a Weapon's prefab by its id.</summary>
+    /// <param name="_weaponId">Weapon's prefab's id.</param>
+    /// <returns>Returns a weapon's prefab</returns>
     private GameObject GetWeapon(int _weaponId)
     {
         return Weapon.weapons[_weaponId];

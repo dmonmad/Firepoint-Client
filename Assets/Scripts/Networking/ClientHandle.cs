@@ -9,6 +9,8 @@ public class ClientHandle : MonoBehaviour
 
     public static int lastUpdateWeaponBulletsPacketId = 0;
 
+    /// <summary>Proccesses the welcome message from the server.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void Welcome(Packet _packet)
     {
         string _msg = _packet.ReadString();
@@ -22,6 +24,8 @@ public class ClientHandle : MonoBehaviour
         Client.instance.udp.Connect(((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port);
     }
 
+    /// <summary>Proccesses the spawn player message from the server.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void SpawnPlayer(Packet _packet)
     {
         int _id = _packet.ReadInt();
@@ -32,6 +36,8 @@ public class ClientHandle : MonoBehaviour
         GameManager.instance.SpawnPlayer(_id, _username, _position, _rotation);
     }
 
+    /// <summary>Updates a player's position.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void PlayerPosition(Packet _packet)
     {
         int _id = _packet.ReadInt();
@@ -45,6 +51,8 @@ public class ClientHandle : MonoBehaviour
         //GameManager.players[_id].transform.position = Vector3.Lerp(GameManager.players[_id].transform.position, _position, Time.deltaTime * InterpolationMoveFactor);
     }
 
+    /// <summary>Updates a player's rotation.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void PlayerRotation(Packet _packet)
     {
         int _id = _packet.ReadInt();
@@ -53,6 +61,8 @@ public class ClientHandle : MonoBehaviour
         GameManager.players[_id].transform.rotation = _rotation;
     }
 
+    /// <summary>Proccesses the disconnect player message from the server.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void PlayerDisconnected(Packet _packet)
     {
         int _id = _packet.ReadInt();
@@ -64,11 +74,13 @@ public class ClientHandle : MonoBehaviour
             wm.DropAllWeapons(player.transform.forward, player.weaponDropper);
         }
 
-        Console.GetInstance().Log($"El jugador "+player.username+" se ha desconectado");
+        Console.GetInstance().Log($"{player.username} has disconnected");
         Destroy(GameManager.players[_id].gameObject);
         GameManager.players.Remove(_id);
     }
 
+    /// <summary>Proccesses the health player message from the server.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void PlayerHealth(Packet _packet)
     {
         int _id = _packet.ReadInt();
@@ -78,6 +90,8 @@ public class ClientHandle : MonoBehaviour
         GameManager.players[_id].SetHealth(_health, _attackerId);
     }
 
+    /// <summary>Proccesses the respawn player message from the server.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void PlayerRespawned(Packet _packet)
     {
         int _id = _packet.ReadInt();
@@ -85,6 +99,8 @@ public class ClientHandle : MonoBehaviour
         GameManager.players[_id].Respawn();
     }
 
+    /// <summary>Apply a decal to the given position in the world.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void ApplyDecal(Packet _packet)
     {
         Vector3 _position = _packet.ReadVector3();
@@ -93,6 +109,8 @@ public class ClientHandle : MonoBehaviour
         GameManager.instance.ApplyDecal(_position, _rotation);
     }
 
+    /// <summary>Proccesses the create item message from the server.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void CreateItemSpawner(Packet _packet)
     {
 
@@ -106,6 +124,8 @@ public class ClientHandle : MonoBehaviour
         GameManager.instance.CreateItem(_weaponId, _itemId, _position, _heldBy, _bullets, _ammo);
     }
 
+    /// <summary>Proccesses the item picked up message from the server.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void ItemPickedUp(Packet _packet)
     {
         int _itemId = _packet.ReadInt();
@@ -120,6 +140,8 @@ public class ClientHandle : MonoBehaviour
 
     }
 
+    /// <summary>Proccesses the player throws weapon message from the server.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void PlayerThrowWeapon(Packet _packet)
     {
         Vector3 _dropVector = _packet.ReadVector3();
@@ -134,6 +156,8 @@ public class ClientHandle : MonoBehaviour
         }
     }
 
+    /// <summary>Proccesses the update bullets message from the server.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void UpdateWeaponBullets(Packet _packet)
     {
         int _packetId = _packet.ReadInt();
@@ -149,6 +173,8 @@ public class ClientHandle : MonoBehaviour
 
     }
 
+    /// <summary>Proccesses the spawn player message from the server.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void ChangeWeaponFromPlayer(Packet _packet)
     {
         int _fromPlayer = _packet.ReadInt();
@@ -160,7 +186,9 @@ public class ClientHandle : MonoBehaviour
             wm.ChangeWeapon(_index);
         }
     }
-    
+
+    /// <summary>Proccesses the player shot message from the server.</summary>
+    /// <param name="_packet">The packet with the info.</param>
     public static void PlayerShot(Packet _packet)
     {
         int _fromPlayer = _packet.ReadInt();

@@ -64,6 +64,8 @@ public class Weapon : MonoBehaviour
 
     #endregion
 
+    /// <summary>Initializes the weapon with the given ID.</summary>
+    /// <param name="_itemId">The image which sprite's color must be changed.</param>
     public void Initialize(int _itemId)
     {
         model = GetComponentInChildren<MeshRenderer>();
@@ -86,11 +88,15 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    /// <summary>Enables the weapon's collider.</summary>
     public void WeaponDropped()
     {
         modelCollider.enabled = true;
     }
 
+    /// <summary>Takes a shot </summary>
+    /// <param name="_newShootOrigin">The origin from where the shoots should be casted.</param>
+    /// <returns>Returns true if the shot was made, false if else</returns>
     public bool Shoot(Transform _newShootOrigin)
     {
         if (!_shootOrigin)
@@ -133,11 +139,13 @@ public class Weapon : MonoBehaviour
 
     }
 
+    /// <summary>Stops firing if Automatic Mode.</summary>
     public void StopFiring()
     {
         isFiring = false;
     }
 
+    /// <summary>Prepares the next shot in the time specified.</summary>
     IEnumerator PrepareNextShot()
     {
         preparingNextShot = true;
@@ -146,6 +154,8 @@ public class Weapon : MonoBehaviour
         isNextShotReady = true;
     }
 
+    /// <summary>Takes a shot in automatic mode.</summary>
+    /// <param name="_shootDirection">The vector that the shot will travel.</param>
     public void AutomaticShot(Vector3 _shootDirection)
     {
         ClientSend.PlayerShoot(_shootDirection);
@@ -158,6 +168,9 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    /// <summary>Takes a shot in semi-automatic mode.</summary>
+    /// <param name="_shootDirection">The vector that the shot will travel.</param>
+
     public void SemiShot(Vector3 _shootDirection)
     {
         ClientSend.PlayerShoot(_shootDirection);
@@ -169,6 +182,7 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    /// <summary>Simulates a shot from the weapon.</summary>
     public void Shot()
     {
         if (shootParticles && shootSound)
@@ -178,6 +192,9 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    /// <summary>Update bullets from the weapon.</summary>
+    /// <param name="actualClip">The new weapon's clip.</param>
+    /// <param name="actualAmmo">The new weapon's ammo.</param>
     public void UpdateBullets(int actualClip, int actualAmmo)
     {
         clip = actualClip;
